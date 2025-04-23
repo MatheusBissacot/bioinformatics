@@ -1,5 +1,5 @@
 import argparse
-
+from datetime import datetime
 from utils import (
     preprocess_sequence,
     run_blast,
@@ -22,7 +22,7 @@ def main():
     blast_xml = run_blast(protein_sequence)
 
     print("[*] Parsing BLAST results...")
-    homologs_fasta = parse_blast_results(blast_xml, args.num_species)
+    homologs_fasta = parse_blast_results(blast_xml, args.num_species, protein_sequence)
 
     print("[*] Performing multiple sequence alignment...")
     msa_file = perform_msa(homologs_fasta)
@@ -32,6 +32,15 @@ def main():
 
     print("[*] Generating report...")
     generate_report(args.input_file, homologs_fasta, msa_file, tree_file)
+
+    data = {
+        'gene_name': protein_sequence.id,  # Nome do gene
+        'best_frame': '+1',  # Frame de leitura selecionado
+        'translated_sequence': protein_sequence,  # Sequência traduzida simulada
+        'blast_hits': homologs_fasta,  # Hits do BLAST
+        'tree_image_path': tree_file,  # Caminho para a árvore filogenética gerada
+        'current_year': datetime.now().year  # Ano atual
+    }
 
     print("[+] Analysis complete! Check the 'results/' directory.")
 

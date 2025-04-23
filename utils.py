@@ -3,7 +3,6 @@
 from Bio import SeqIO, AlignIO, Seq, Phylo
 from Bio.Seq import Seq
 from Bio.Blast import NCBIWWW, NCBIXML
-from Bio.Align.Applications import ClustalwCommandline
 import requests
 import os
 import uuid
@@ -18,29 +17,50 @@ def ensure_dir(directory):
 ensure_dir(RESULTS_DIR)
 
 def preprocess_sequence(input_file):
-    """Reads the input FASTA, finds the longest ORF, returns protein sequence."""
+    """Reads the input FASTA, finds the longest ORF if DNA, returns protein sequence."""
     record = SeqIO.read(input_file, "fasta")
     seq = record.seq
 
-    # Generate 6 frames
-    frames = [
-        seq.translate(to_stop=False),
-        seq[1:].translate(to_stop=False),
-        seq[2:].translate(to_stop=False),
-        seq.reverse_complement().translate(to_stop=False),
-        seq.reverse_complement()[1:].translate(to_stop=False),
-        seq.reverse_complement()[2:].translate(to_stop=False),
-    ]
+    #Some sequences from NCBI GeneBank contain letter 'N', which illustrates that these nucleotide bases are not 
+    #deciphered correctly, leaving an unidentified nucleotide. 
+    #For this we decid to remove the N's basead in this https://www.researchgate.net/post/How_to_handle_N_in_Nucleotide_Genes_Sequences_retrieved_from_NCBI_GeneBank 
+    record.seq = Seq(str(record.seq).replace("N", ""))
+    record.seq = record.seq[:len(record.seq) - len(record.seq) % 3].translate()
 
-    longest_peptide = ""
-    for idx, frame in enumerate(frames):
-        peptides = str(frame).split("*")  # split at stop codon
-        longest_in_frame = max(peptides, key=len)
-        if len(longest_in_frame) > len(longest_peptide):
-            longest_peptide = longest_in_frame
+    # If DNA, translate to protein
+    if set(record.seq.upper()).issubset({"A", "T", "C", "G"}):
+        # Generate 6 frames
+        frames = [
+            seq.translate(to_stop=False),
+            seq[1:].translate(to_stop=False),
+            seq[2:].translate(to_stop=False),
+            seq.reverse_complement().translate(to_stop=False),
+            seq.reverse_complement()[1:].translate(to_stop=False),
+            seq.reverse_complement()[2:].translate(to_stop=False),
+        ]
 
-    print(f"[+] Preprocessing complete. Longest ORF length: {len(longest_peptide)} aa")
-    return longest_peptide
+        longest_peptide = ""
+        id = 0
+        for idx, frame in enumerate(frames):
+            peptides = str(frame).split("*")  # split at stop codon
+            longest_in_frame = max(peptides, key=len)
+            if len(longest_in_frame) > len(longest_peptide):
+                longest_peptide = longest_in_frame
+                id = idx
+
+        print(f"[+] Preprocessing complete. Longest ORF length: {len(longest_peptide)} aa. Frame number: {id+1}")
+        print("Please choose the protein sequence:")
+        for i, prot in enumerate(frames):
+            print(f"Frame {i+1}: {prot}")
+        try:
+            choice = int(input("Enter frame number: "))
+            if not 1 <= choice <= 6:
+                raise ValueError
+        except ValueError:
+            print("Invalid frame. Please enter a number between 1 and 6.")
+            exit(1)
+        return frames[choice-1]
+    return record
 
 def run_blast(protein_sequence):
     """Runs BLASTP for the given protein sequence and saves XML results."""
@@ -61,7 +81,7 @@ def run_blast(protein_sequence):
     print(f"[+] BLAST results saved to {output_file}")
     return output_file
 
-def parse_blast_results(blast_xml, num_species):
+def parse_blast_results(blast_xml, num_species, human_protein_seq):
     """Parses BLAST XML and saves top unique species sequences to FASTA."""
     print("[*] Parsing BLAST results...")
     species_sequences = {}
@@ -86,12 +106,14 @@ def parse_blast_results(blast_xml, num_species):
 
     output_fasta = os.path.join(RESULTS_DIR, "homologs.fasta")
     with open(output_fasta, "w") as f:
+        f.write(">Human_input\n")
+        f.write(f"{human_protein_seq}\n")
+
         for idx, (species, seq) in enumerate(species_sequences.items(), 1):
             f.write(f">seq{idx}_{species.replace(' ', '_')}\n")
             f.write(f"{seq}\n")
-
-    print(f"[+] Saved {len(species_sequences)} homolog sequences to {output_fasta}")
     return output_fasta
+
 
 def perform_msa(input_fasta):
     """Performs Multiple Sequence Alignment (MSA) using the EBI Clustal Omega API."""
