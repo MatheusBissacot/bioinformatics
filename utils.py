@@ -7,6 +7,10 @@ import requests
 import os
 import uuid
 from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+import matplotlib
+import matplotlib.pyplot as plt
+from jinja2 import Environment, FileSystemLoader
+from xhtml2pdf import pisa
 
 RESULTS_DIR = "results"
 
@@ -19,16 +23,15 @@ ensure_dir(RESULTS_DIR)
 def preprocess_sequence(input_file):
     """Reads the input FASTA, finds the longest ORF if DNA, returns protein sequence."""
     record = SeqIO.read(input_file, "fasta")
-    seq = record.seq
 
     #Some sequences from NCBI GeneBank contain letter 'N', which illustrates that these nucleotide bases are not 
     #deciphered correctly, leaving an unidentified nucleotide. 
     #For this we decid to remove the N's basead in this https://www.researchgate.net/post/How_to_handle_N_in_Nucleotide_Genes_Sequences_retrieved_from_NCBI_GeneBank 
-    record.seq = Seq(str(record.seq).replace("N", ""))
-    record.seq = record.seq[:len(record.seq) - len(record.seq) % 3].translate()
-
+    seq = Seq(str(record.seq).replace("N", "")).upper()
+    seq = seq[:len(seq) - len(seq) % 3]
+    
     # If DNA, translate to protein
-    if set(record.seq.upper()).issubset({"A", "T", "C", "G"}):
+    if set(seq.upper()).issubset({"A", "T", "C", "G"}):
         # Generate 6 frames
         frames = [
             seq.translate(to_stop=False),
@@ -59,17 +62,21 @@ def preprocess_sequence(input_file):
         except ValueError:
             print("Invalid frame. Please enter a number between 1 and 6.")
             exit(1)
-        return frames[choice-1]
-    return record
+        return frames[choice-1], record.id, choice
+    print("[*] Sequence appears to already be protein or contains invalid bases.")
+    return record.seq, record.id, None
 
-def run_blast(protein_sequence):
+
+def run_blast(protein_sequence, num_species):
     """Runs BLASTP for the given protein sequence and saves XML results."""
     print("[*] Running BLASTP query...")
+    hitlist_size = num_species * 3
     result_handle = NCBIWWW.qblast(
         program="blastp",
         database="nr",
         sequence=protein_sequence,
-        hitlist_size=50,
+        hitlist_size=hitlist_size,
+        expect=1e-5,
         format_type="XML"
     )
 
@@ -126,7 +133,7 @@ def perform_msa(input_fasta):
     # Submit job
     submit_url = "https://www.ebi.ac.uk/Tools/services/rest/clustalo/run"
     params = {
-        "email": "your_email@example.com",  # Replace with your email
+        "email": "your_email@example.com",  
         "sequence": fasta_content,
         "stype": "protein",
         "outfmt": "clustal"
@@ -186,6 +193,25 @@ def build_phylogenetic_tree(msa_file):
     print(f"[+] Phylogenetic tree saved to {tree_file}")
     return tree_file
 
+def build_tree_image(tree_file):
+
+    matplotlib.use('Agg')
+    output_file = "results/phylogenetic_tree.png"
+
+    tree = Phylo.read(tree_file, "phyloxml")
+
+    for clade in tree.get_terminals():
+        if clade.name:
+            clade.name = "_".join(clade.name.split("_")[1:])
+
+    fig = plt.figure(figsize=(16, 12))
+    axes = fig.add_subplot(1, 1, 1)
+
+    Phylo.draw(tree, do_show=False, axes=axes)
+
+    plt.savefig(output_file, dpi=300)
+    print(f"[+] Phylogenetic tree stored at: {output_file}")
+
 def generate_report(input_file, homologs_fasta, msa_file, tree_file):
     """Generates a simple text report of the analysis."""
     report_file = os.path.join(RESULTS_DIR, "report.txt")
@@ -199,3 +225,54 @@ def generate_report(input_file, homologs_fasta, msa_file, tree_file):
         f.write("Analysis complete.\n")
 
     print(f"[+] Report generated at {report_file}")
+
+def parse_fasta(fasta_file, human_protein):
+    hits = []
+
+    for record in SeqIO.parse(fasta_file, "fasta"):
+        hit = {
+            'species':  "_".join(record.id.split("_")[1:]),
+            'description': record.seq,
+        }
+        hits.append(hit)
+    return hits
+
+def parse_aln_file(filepath):
+    sequences = dict()
+
+    with open(filepath, 'r') as file:
+        for line in file:
+            line = line.rstrip()
+            if not line or line.startswith('CLUSTAL') or line.startswith(' '):
+                continue  # Ignorar linhas vazias, header e consenso
+            parts = line.split()
+            if len(parts) < 2:
+                continue  # Linha inválida
+            seq_id, seq_fragment = parts[0], parts[1]
+            if seq_id not in sequences:
+                sequences[seq_id] = ''
+            sequences[seq_id] += seq_fragment
+
+    # Agora, vamos organizar as sequências para facilitar a visualização
+    max_length = max(len(seq) for seq in sequences.values())
+    # Preencher as sequências com espaços para alinhamento visual
+    for seq_id in sequences:
+        sequences[seq_id] = sequences[seq_id].ljust(max_length)
+
+    return sequences
+
+def create_report(data):
+    env = Environment(loader=FileSystemLoader(''))
+    template = env.get_template('report.html')
+    html_content = template.render(data)
+
+    with open('results/report_generated.html', 'w', encoding='utf-8') as html_file:
+        html_file.write(html_content)
+
+    with open('results/report.pdf', 'wb') as pdf_file:
+        pisa_status = pisa.CreatePDF(html_content, dest=pdf_file)
+
+    if pisa_status.err:
+        print("Erro ao criar o PDF")
+    else:
+        print("PDF criado com sucesso")
