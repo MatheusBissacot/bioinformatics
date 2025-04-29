@@ -10,7 +10,6 @@ from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstruct
 import matplotlib
 import matplotlib.pyplot as plt
 from jinja2 import Environment, FileSystemLoader
-from xhtml2pdf import pisa
 
 RESULTS_DIR = "results"
 
@@ -211,6 +210,7 @@ def build_tree_image(tree_file):
 
     plt.savefig(output_file, dpi=300)
     print(f"[+] Phylogenetic tree stored at: {output_file}")
+    return output_file
 
 def generate_report(input_file, homologs_fasta, msa_file, tree_file):
     """Generates a simple text report of the analysis."""
@@ -244,18 +244,16 @@ def parse_aln_file(filepath):
         for line in file:
             line = line.rstrip()
             if not line or line.startswith('CLUSTAL') or line.startswith(' '):
-                continue  # Ignorar linhas vazias, header e consenso
+                continue  
             parts = line.split()
             if len(parts) < 2:
-                continue  # Linha inválida
+                continue  
             seq_id, seq_fragment = parts[0], parts[1]
             if seq_id not in sequences:
                 sequences[seq_id] = ''
             sequences[seq_id] += seq_fragment
 
-    # Agora, vamos organizar as sequências para facilitar a visualização
     max_length = max(len(seq) for seq in sequences.values())
-    # Preencher as sequências com espaços para alinhamento visual
     for seq_id in sequences:
         sequences[seq_id] = sequences[seq_id].ljust(max_length)
 
@@ -268,11 +266,3 @@ def create_report(data):
 
     with open('results/report_generated.html', 'w', encoding='utf-8') as html_file:
         html_file.write(html_content)
-
-    with open('results/report.pdf', 'wb') as pdf_file:
-        pisa_status = pisa.CreatePDF(html_content, dest=pdf_file)
-
-    if pisa_status.err:
-        print("Erro ao criar o PDF")
-    else:
-        print("PDF criado com sucesso")

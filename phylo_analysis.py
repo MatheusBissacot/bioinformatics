@@ -40,6 +40,7 @@ def main():
 
     homologs = parse_fasta(homologs_fasta, protein_sequence)
     msa_file = parse_aln_file("results/alignment.aln")
+    tree = "phylogenetic_tree.png"
     
     data = {
         'gene_name': id,  # Nome do gene
