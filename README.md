@@ -1,6 +1,7 @@
 # Phylogenetics of a Taste 2 Receptor Member Gene (T2R38)
 
 2024/2025 2ºSemestre 1ºAno MIA
+
 This repository contains the scripts and report for the phylogenetic analysis of the **T2R38** gene, developed as part of the Bioinformatics course at the University of Porto, Master in Artifical Inteligence.
 
 ## 📄 Description
