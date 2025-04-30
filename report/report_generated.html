@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phylogenetic Analysis Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 20px;
+            padding: 20px;
+        }
+    
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+    
+        header h1 {
+            font-size: 36px;
+            color: #0f1f6f;
+            margin-bottom: 10px;
+        }
+    
+        header p {
+            font-size: 16px;
+            color: #555;
+        }
+    
+        section {
+            margin-bottom: 40px;
+        }
+    
+        h2 {
+            font-size: 24px;
+            color: #0f1f6f;
+            border-bottom: 2px solid #0f1f6f;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+    
+        p, li {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+        }
+    
+        table {
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            table-layout: fixed; /* Força a tabela a se ajustar ao conteúdo */
+        }
+    
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            word-wrap: break-word; /* Permite quebras no texto */
+            overflow-wrap: break-word; /* Permite quebras no texto */
+        }
+    
+        th {
+            background-color: #0f1f6f;
+            color: white;
+        }
+    
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+    
+        .alignment-container {
+            display: block;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+    
+        .sequence-row {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+    
+        .sequence-id {
+            width: 150px; /* Defina uma largura fixa para a coluna de IDs */
+            font-family: monospace;
+            font-size: 14px;
+            text-align: right;
+            padding-right: 10px;
+            white-space: nowrap; /* Evita que o ID quebre para a linha seguinte */
+        }
+    
+        .aligned-sequence {
+            display: flex;
+            font-family: monospace;
+            font-size: 14px;
+            flex-wrap: wrap; /* Permite que a sequência seja quebrada */
+        }
+    
+        .alignment-char {
+            display: inline-block;
+            width: 16px;  /* Largura fixa para cada caractere */
+            text-align: center;
+            font-size: 14px;
+        }
+    
+        code {
+            display: block;
+            width: 100%; /* Garante que o código ocupe toda a largura disponível */
+            word-wrap: break-word; /* Garante quebras de palavras dentro do código */
+            overflow-wrap: break-word; /* Garante quebras de palavras dentro do código */
+            white-space: pre-wrap; /* Permite quebra de linha dentro do código */
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 100%; /* Impede que o conteúdo ultrapasse o tamanho da página */
+            word-break: break-word; /* Quebra palavras longas que não cabem na linha */
+        }
+    
+        footer {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            margin-top: 40px;
+        }
+    
+        footer p {
+            margin: 5px 0;
+        }
+    
+        footer a {
+            text-decoration: none;
+            color: #0f1f6f;
+        }
+    </style>
+    
+</head>
+<body>
+
+<header>
+    <h1>Phylogenetic Analysis Report</h1>
+    <p>Generation and analysis of the T2R38 gene</p>
+</header>
+
+<section>
+    <h2>Analysis Summary</h2>
+    <p><strong>Gene analyzed:</strong> T2R38_HUMAN</p>
+</section>
+
+<section>
+    <h2>Chosen Translation Frame</h2>
+    <p><strong>Frame selected:</strong> 3</p>
+    <p><strong>Translated sequence:</strong></p>
+    <p><code>VLAWNVHLPFCTGWQPGL*ISQLEKRSRIAN*RSDIMLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC*EWT*NELFINTPVSLHKYASDSSGIQL*FLTKPSNFFYKTQLKVSPLCINEL</code></p>
+</section>
+
+<section>
+    <h2>BLAST results</h2>
+    <p><strong>Total hits found:</strong> 10</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Species</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>input</td>
+                <td><code>VLAWNVHLPFCTGWQPGL*ISQLEKRSRIAN*RSDIMLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC*EWT*NELFINTPVSLHKYASDSSGIQL*FLTKPSNFFYKTQLKVSPLCINEL</code></td>
+            </tr>
+            
+            <tr>
+                <td>synthetic_construct</td>
+                <td><code>MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Homo_sapiens</td>
+                <td><code>MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCVAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Pan_troglodytes</td>
+                <td><code>MLTLTRIHTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Gorilla_gorilla</td>
+                <td><code>MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYIRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTPC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Pan_paniscus</td>
+                <td><code>MLTLTRIHTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAINMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Nomascus_leucogenys</td>
+                <td><code>MLTLTRICTVSYEIRNTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNRSYQAIIMLWMIANQANLWLATCLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCYFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Pongo_pygmaeus</td>
+                <td><code>MLTLTRICAVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWIIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTFLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRNKIGVMVCVGIMAACPSGHAAVLISGNATLRRAVTTILLWAQSSMKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Symphalangus_syndactylus</td>
+                <td><code>MLTLTRICTVSYEIRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANKANLWLATCLSLLYCSKLIHFSHTFLICLASWVSRKISQILLGIILCSCICTVLCVWCYFSRPHFTVTTVLFMNNSTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Hylobates_klossii</td>
+                <td><code>MLTLTRICTVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYHAIIMLWMIANQANLWLATCLSLLYCSKLIRSSHTFLICLASWVSRKICQMLLGIILCSCICTVLCVWCYFSRPHFTVTTVLFTNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC</code></td>
+            </tr>
+            
+            <tr>
+                <td>Pongo_pygmaeus_pygmaeus</td>
+                <td><code>MLTLTHICAVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWIIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTFLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRNKIGVMVCVGIMAACPSGHAGVLISGNATLRRAVTTILLWAQSSMKVKADHKADSRTLC</code></td>
+            </tr>
+            
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Multiple Sequence Alignment</h2>
+    <p><strong>CLUSTAL Omega (1.2.4) Alignment:</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Sequence ID</th>
+                <th>Aligned Sequence</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td>Human_input</td>
+                <td><code>VLAWNVHLPFCTGWQPGL*ISQLEKRSRIAN*RSDIMLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC*EWT*NELFINTPVSLHKYASDSSGIQL*FLTKPSNFFYKTQLKVSPLCINEL</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq1_synthetic_construct</td>
+                <td><code>------------------------------------MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq2_Homo_sapiens</td>
+                <td><code>------------------------------------MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQALSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRNSRDPSLEAHIKALKSLVSFFCFFVISSCVAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVMTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq3_Pan_troglodytes</td>
+                <td><code>------------------------------------MLTLTRIHTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq4_Gorilla_gorilla</td>
+                <td><code>------------------------------------MLTLTRIRTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYIRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTPC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq5_Pan_paniscus</td>
+                <td><code>------------------------------------MLTLTRIHTVSYEVRSTFLFISVLEFAVGFLTNAFVFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAINMLWMIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAVLISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq6_Nomascus_leucogenys</td>
+                <td><code>------------------------------------MLTLTRICTVSYEIRNTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNRSYQAIIMLWMIANQANLWLATCLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCYFSRPHFTVTTVLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq7_Pongo_pygmaeus</td>
+                <td><code>------------------------------------MLTLTRICAVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWIIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTFLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRNKIGVMVCVGIMAACPSGHAAVLISGNATLRRAVTTILLWAQSSMKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq8_Symphalangus_syndactylus</td>
+                <td><code>------------------------------------MLTLTRICTVSYEIRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWMIANKANLWLATCLSLLYCSKLIHFSHTFLICLASWVSRKISQILLGIILCSCICTVLCVWCYFSRPHFTVTTVLFMNNSTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq9_Hylobates_klossii</td>
+                <td><code>------------------------------------MLTLTRICTVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYHAIIMLWMIANQANLWLATCLSLLYCSKLIRSSHTFLICLASWVSRKICQMLLGIILCSCICTVLCVWCYFSRPHFTVTTVLFTNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDFRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRDKIGVMVCVGIMAACPSGHAAILISGNAKLRRAVTTILLWAQSSLKVRADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+            <tr>
+                <td>seq10_Pongo_pygmaeus_pygmaeus</td>
+                <td><code>------------------------------------MLTLTHICAVSYEVRSTFLFISVLEFAVGFLTNAFIFLVNFWDVVKRQPLSNSDCVLLCLSISRLFLHGLLFLSAIQLTHFQKLSEPLNHSYQAIIMLWIIANQANLWLAACLSLLYCSKLIRFSHTFLICLASWVSRKISQMLLGIILCSCICTVLCVWCFFSRPHFTVTTFLFMNNNTRLNWQIKDLNLFYSFLFCYLWSVPPFLLFLVSSGMLTVSLGRHMRTMKVYTRDSRDPSLEAHIKALKSLVSFFCFFVISSCAAFISVPLLILWRNKIGVMVCVGIMAACPSGHAGVLISGNATLRRAVTTILLWAQSSMKVKADHKADSRTLC-----------------------------------------------------</code></td>
+            </tr>
+            
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Phylogenetic Tree</h2>
+    <img src="phylogenetic_tree.png" alt="Árvore Filogenética">
+</section>
+
+<footer>
+    <p>Report generated by: <a href="https://github.com/MatheusBissacot/bioinformatics">Projeto Phylo Analysis</a></p>
+    <p>&copy; 2024/2025 - Bioinformatics - Master in Artificial Intelligence</p>
+    <p>Project developed by Gonçalo Brochado and Matheus Bissacot</p>
+</footer>
+
+</body>
+</html>
